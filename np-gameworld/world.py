@@ -4,7 +4,13 @@
 class NpGameWorld:
 
     enemies = set()
+
+    hero_x = None
+    hero_y = None
+
     hero_bullets = set()
+    hero_bullets_x = []
+    hero_bullets_y = []
 
     def __init__(self, screen_width=1024, screen_height=768):
         self.screen_width = screen_width
@@ -18,7 +24,7 @@ class NpGameWorld:
         self.hero_spd = hero_spd
         self.hero_bul_spd = hero_bul_spd
 
-#        self.hero_radius = self.hero_size / 2
+        self.hero_radius = self.hero_size / 2
 
     def run_world(self):
         self.game_over = False
