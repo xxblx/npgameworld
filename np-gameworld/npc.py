@@ -4,11 +4,12 @@ import numpy as np
 
 
 class NPC:
-    spd = 0
+    """ Basic class for all NPC - hero and enemies """
 
-    def __init__(self, world, pos_x, pos_y, radius):
+    def __init__(self, world, pos_x, pos_y, radius, spd):
         self.__world = world
 
+        self.spd = spd
         self.radius = radius
         self.size = self.radius * 2
 
@@ -34,26 +35,25 @@ class NPC:
 
     def move(self, x_step=0, y_step=0, borders=True):
 
-        if borders:  # bullets must ignore screen borders
-            # x moving
-            if self.pad_x <= 0 or self.pad_x >= self.screen_width - self.size:
-                x_step = 0
+        # x moving
+        if self.pad_x <= 0 or self.pad_x >= self.screen_width - self.size:
+            x_step = 0
 
-            elif 0 < self.screen_width - self.pad_x + self.size < self.spd:
-                x_step = self.screen_width - self.pad_x + self.size
+        elif 0 < self.screen_width - self.pad_x + self.size < self.spd:
+            x_step = self.screen_width - self.pad_x + self.size
 
-            elif 0 < self.pad_x < self.spd:
-                x_step = -(self.spd - self.pad_x)
+        elif 0 < self.pad_x < self.spd:
+            x_step = -(self.spd - self.pad_x)
 
-            # y moving
-            if self.pad_y <= 0 or self.pad_y >= self.screen_height - self.size:
-                y_step = 0
+        # y moving
+        if self.pad_y <= 0 or self.pad_y >= self.screen_height - self.size:
+            y_step = 0
 
-            elif 0 < self.screen_height - self.pad_y + self.size < self.spd:
-                y_step = self.screen_height - self.pad_y + self.size
+        elif 0 < self.screen_height - self.pad_y + self.size < self.spd:
+            y_step = self.screen_height - self.pad_y + self.size
 
-            elif 0 < self.pad_y < self.spd:
-                y_step = -(self.spd - self.pad_y)
+        elif 0 < self.pad_y < self.spd:
+            y_step = -(self.spd - self.pad_y)
 
         self.pad_x += x_step
         self.pad_y += y_step
@@ -63,6 +63,26 @@ class NPC:
 
 class Hero(NPC):
     pass
+
+
+class HeroBullet(NPC):
+    border_crossed = False
+
+    def move(self):
+        self.pad_x += self.spd
+        self.pad_y += self.spd
+        self.x += self.spd
+        self.y += self.spd
+
+    def check_border_cross(self):
+        if self.pad_x < 0 or self.pad_x > self.screen_width:
+            self.border_crossed = True
+        elif self.pad_y < 0 or self.pad_y > self.screen_height:
+            self.border_crossed = True
+
+    def iter_process(self):
+        self.move()
+        self.check_border_cross()
 
 
 class Enemy(NPC):
