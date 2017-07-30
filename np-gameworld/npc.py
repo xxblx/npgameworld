@@ -87,6 +87,9 @@ class HeroBullet(NPC):
 
 class Enemy(NPC):
 
+    collide_hero = False
+    collided_hero_bullet = False
+
     @property
     def hero_x(self):
         return self.__world.hero_x
@@ -121,13 +124,11 @@ class Enemy(NPC):
         """
 
         dst = np.sqrt((self.x - self.hero_x)**2 + (self.y - self.hero_y)**2)
-        res = 0
         if dst <= self.radius + self.hero_radius:
-            res = 1
-
-        return res
+            self.collide_hero = True
 
     def iter_process(self):
+        self.collide_hero = False
 
         if self.hero_x > self.x:
             x_step = self.spd
@@ -146,8 +147,7 @@ class Enemy(NPC):
         self.move(x_step, y_step)
 
         # TODO: check collisions with hero's bulletrs
-        collided_hero_bullet = False
+        # collided_hero_bullet = True
 
-        collided_hero = self.check_hero_collision()
-
-        return collided_hero_bullet, collided_hero
+        if not self.collided_hero_bullet:
+            self.check_hero_collision()
