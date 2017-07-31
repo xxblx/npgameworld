@@ -87,7 +87,7 @@ class HeroBullet(NPC):
 
 class Enemy(NPC):
 
-    damage = 2
+    power = 2
 
     hit_hero = False
     killed_by = None

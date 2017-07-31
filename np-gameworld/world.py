@@ -57,7 +57,7 @@ class NpGameWorld:
                 enemy.iter_process()
 
                 if enemy.hit_hero:
-                    hero_iter_damage += enemy.damage
+                    hero_iter_damage += enemy.power
 
                 if enemy.killed is not None:
                     rm_enemies.add(enemy)
