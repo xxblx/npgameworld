@@ -62,11 +62,29 @@ class NPC:
 
 
 class Hero(NPC):
-    pass
+    """ Hero controlled by player """
+
+    def __init__(self, world, pos_x, pos_y, radius, spd, bullet_radius,
+                 bullet_spd, bullet_power, reload_iters):
+
+        super().__init__(world, pos_x, pos_y, radius, spd)
+
+        self.bullet_radius = bullet_radius
+        self.bullet_spd = bullet_spd
+        self.bullet_power = bullet_power
+        self.relod_iters = reload_iters
+
+    def shoot(self):
+        raise NotImplemented
 
 
 class HeroBullet(NPC):
     border_crossed = False
+    got_enemy = False
+
+    def __init__(self, world, pos_x, pos_y, radius, spd, power):
+        super().__init__(world, pos_x, pos_y, radius, spd)
+        self.power = power
 
     def move(self):
         self.pad_x += self.spd
@@ -86,11 +104,13 @@ class HeroBullet(NPC):
 
 
 class Enemy(NPC):
-
-    power = 2
-
     hit_hero = False
     killed_by = None
+
+    def __init__(self, world, pos_x, pos_y, radius, spd, power, hp):
+        super().__init__(world, pos_x, pos_y, radius, spd)
+        self.power = power
+        self.hp = hp
 
     @property
     def hero_x(self):
@@ -116,7 +136,12 @@ class Enemy(NPC):
         for bullet in self.hero_bullets:
             dst = np.sqrt((self.x - bullet.x)**2 + (self.y - bullet.y)**2)
             if dst <= self.radius + bullet.radius:
-                self.killed_by = bullet
+                bullet.got_enemy = True
+
+                self.hp -= bullet.power
+                if self.hp <= 0:
+                    self.killed_by = bullet
+                    break
 
     def check_hero_collision(self):
         """
