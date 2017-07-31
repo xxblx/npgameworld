@@ -3,21 +3,11 @@
 
 class NpGameWorld:
 
-    hero_x = None
-    hero_y = None
-
-    enemies = set()
-    hero_bullets = set()
-
     def __init__(self, screen_width=1024, screen_height=768):
         self.screen_width = screen_width
         self.screen_height = screen_height
+
         self.enemies_spawned = 0
-
-        self.hero_x = None
-        self.hero_y = None
-        self.hero_hp = 100
-
         self.enemies = set()
         self.hero_bullets = set()
 
@@ -25,14 +15,20 @@ class NpGameWorld:
         self.iter_count = 0
         self.enemies_killed = 0
 
-    def setup_hero(self, hero_hp=100, hero_size=30, hero_spd=3,
-                   hero_bul_size=6, hero_bul_spd=6, hero_reload_delay=5):
-        self.hero_hp = hero_hp
-        self.hero_size = hero_size
-        self.hero_spd = hero_spd
-        self.hero_bul_spd = hero_bul_spd
+    def setup_hero(self, hp=100, radius=15, spd=3, bul_radius=3, bul_spd=6,
+                   bul_power=1, reload_iters=5):
 
-        self.hero_radius = self.hero_size / 2
+        self.hero_hp = hp
+        self.hero_radius = radius
+        self.hero_spd = spd
+        self.hero_reload_iters = reload_iters
+
+        self.herp_buld_radius = bul_radius
+        self.hero_bul_spd = bul_spd
+        self.hero_bul_power = bul_power
+
+    def setup_enemy(self, hp=1, radius=15, spd=1, unlock=0, probability=1):
+        pass
 
     def world_gen(self):
         """ Generator for world loop """
