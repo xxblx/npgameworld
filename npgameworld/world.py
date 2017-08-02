@@ -5,13 +5,14 @@ from .npc import Hero
 
 class NpGameWorld:
 
-    def __init__(self, screen_width=1024, screen_height=768):
+    def __init__(self, screen_width=1024, screen_height=768, start_enemies=3):
         self.screen_width = screen_width
         self.screen_height = screen_height
 
-        self.enemies_spawned = 0
-        self.max_enemies = 0
+        self.enemies_in_game = 0
+        self.enemies_max = start_enemies
         self.enemies_settings = {}
+
         self.enemies = set()
         self.hero_bullets = set()
 
@@ -40,8 +41,8 @@ class NpGameWorld:
                          self.hero_bul_spd, self.hero_bul_power,
                          self.hero_reload_iters)
 
-    def add_enemy(self, hp=1, radius=15, spd=1, unlock=0, power=2,
-                  probability=1):
+    def setup_enemy(self, hp=1, radius=15, spd=1, unlock=0, power=2,
+                    probability=1):
         pass
 
     def world_gen(self):
@@ -52,7 +53,6 @@ class NpGameWorld:
         while not self.game_over:
             # TODO: unlock new enemies
             # TODO: increase max enemies count
-            # TODO: add new enemies
 
             hero_iter_damage = 0
             rm_bullets = set()
@@ -66,11 +66,13 @@ class NpGameWorld:
             self.hero_x = self.hero.x
             self.hero_y = self.hero.y
 
+            # Bullets moving
             for bullet in self.hero_bullets:
                 bullet.iter_process()
                 if bullet.border_crossed:
                     rm_bullets.add(bullet)
 
+            # Enemies moving
             for enemy in self.enemies:
                 enemy.iter_process()
 
@@ -88,8 +90,14 @@ class NpGameWorld:
                 self.game_over = True
                 return
 
+            # Remove killed objects
             self.hero_bullets.difference_update(rm_bullets)
             self.enemies.difference_update(rm_enemies)
+
+            # Enemies spawn
+            while self.enemies_in_game < self.enemies_max:
+                # TODO: spawn new enemy
+                pass
 
             # TODO: grab stats
 
