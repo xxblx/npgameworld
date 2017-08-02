@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from .npc import Hero
+
 
 class NpGameWorld:
 
@@ -9,6 +11,7 @@ class NpGameWorld:
 
         self.enemies_spawned = 0
         self.max_enemies = 0
+        self.enemies_settings = {}
         self.enemies = set()
         self.hero_bullets = set()
 
@@ -16,20 +19,29 @@ class NpGameWorld:
         self.iter_count = 0
         self.enemies_killed = 0
 
-    def setup_hero(self, hp=100, radius=15, spd=3, bullet_radius=3,
-                   bullet_spd=6, bullet_power=1, reload_iters=5):
+    def init_hero(self, hp=100, radius=15, spd=3, bullet_radius=3,
+                  bullet_spd=6, bullet_power=1, reload_iters=5):
+        """ Setup and add hero to world """
 
         self.hero_hp = hp
         self.hero_radius = radius
         self.hero_spd = spd
         self.hero_reload_iters = reload_iters
 
-        self.herp_buld_radius = bullet_radius
+        self.herp_bul_radius = bullet_radius
         self.hero_bul_spd = bullet_spd
         self.hero_bul_power = bullet_power
 
-    def setup_enemy(self, hp=1, radius=15, spd=1, unlock=0, power=2,
-                    probability=1):
+        self.hero_x = int(self.screen_width / 2)
+        self.hero_y = int(self.screen_height / 2)
+
+        self.hero = Hero(self, self.hero_x, self.hero_y, self.hero_radius,
+                         self.hero_spd, self.herp_bul_radius,
+                         self.hero_bul_spd, self.hero_bul_power,
+                         self.hero_reload_iters)
+
+    def add_enemy(self, hp=1, radius=15, spd=1, unlock=0, power=2,
+                  probability=1):
         pass
 
     def world_gen(self):
@@ -42,13 +54,17 @@ class NpGameWorld:
             # TODO: increase max enemies count
             # TODO: add new enemies
 
-            hero_actions = yield hero_actions
-
             hero_iter_damage = 0
             rm_bullets = set()
             rm_enemies = set()
 
             # TODO: iter process for hero
+            hero_actions = yield hero_actions
+            if hero_actions:
+                pass
+
+            self.hero_x = self.hero.x
+            self.hero_y = self.hero.y
 
             for bullet in self.hero_bullets:
                 bullet.iter_process()
