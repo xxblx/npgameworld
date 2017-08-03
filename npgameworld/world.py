@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from .npc import Hero
+from math import sqrt
+from random import randint
+
+from .npc import Hero, Enemy
 
 
 class NpGameWorld:
 
     def __init__(self, screen_width=1024, screen_height=768, start_enemies=3,
-                 enemies_max_iter_step=100):
+                 enemies_max_iter_step=100, spawn_dst=150):
         self.screen_width = screen_width
         self.screen_height = screen_height
 
@@ -15,10 +18,14 @@ class NpGameWorld:
         self.enemies_max_iter_step = enemies_max_iter_step
         self.enemies_max = start_enemies
         self.enemies_locked = {}  # key is unlock level
-        self.enemies_types = []  # available unlocked enemies
+        self.enemies_types = []  # available unlocked enemies configs
 
         self.enemies = set()  # alive enemies objects
         self.hero_bullets = set()  # alive hero's bullets objects
+
+        # Minimal possible distance between hero and enemy centres
+        # on enemies spawns
+        self.spawn_dst = spawn_dst
 
         self.game_over = False
         self.iter_count = 0  # completed iterations counter
@@ -46,8 +53,13 @@ class NpGameWorld:
                          self.hero_bul_spd, self.hero_bul_power,
                          self.hero_reload_iters)
 
-    def setup_enemy(self, hp=1, radius=15, spd=1, unlock=0, power=2):
-        pass
+    def add_enemy_type(self, unlock_iter=0, radius=15, spd=1, power=2, hp=1):
+        if unlock_iter not in self.enemies_locked:
+            self.enemies_locked[unlock_iter] = []
+
+        self.enemies_locked[unlock_iter].append(
+            {'radius': radius, 'spd': spd, 'power': power, 'hp': hp}
+        )
 
     def world_gen(self):
         """ Generator for world loop """
@@ -98,8 +110,26 @@ class NpGameWorld:
 
             # Enemies spawn
             while self.enemies_in_game < self.enemies_max:
-                # TODO: spawn new enemy
-                pass
+                idx = randint(0, len(self.enemies_types))
+                enemy_conf = self.enemies_types[idx].copy()
+                enemy_conf['world'] = self
+
+                r = enemy_conf['radius']
+                x = randint(r, self.screen_width-r)
+                y = randint(r, self.screen_height-r)
+                dst = sqrt((x - self.hero_x)**2 + (y - self.hero_y)**2)
+
+                # Don't spawn enemies near to hero
+                while dst <= self.spawn_dst:
+                    x = randint(r, self.screen_width-r)
+                    y = randint(r, self.screen_height-r)
+                    dst = sqrt((x - self.hero_x)**2 + (y - self.hero_y)**2)
+
+                enemy_conf['pos_x'] = x
+                enemy_conf['pos_y'] = y
+
+                enemy = Enemy(**enemy_conf)
+                self.enemies.add(enemy)
 
             # Unlock new enemies
             if self.enemies_locked and self.iter_count in self.enemies_locked:
