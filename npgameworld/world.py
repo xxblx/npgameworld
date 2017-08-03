@@ -108,9 +108,14 @@ class NpGameWorld:
             self.hero_bullets.difference_update(rm_bullets)
             self.enemies.difference_update(rm_enemies)
 
+            # Unlock new enemies
+            if self.enemies_locked and self.iter_count in self.enemies_locked:
+                self.enemies_types += self.enemies_locked[self.iter_count]
+                del self.enemies_locked[self.iter_count]
+
             # Enemies spawn
             while self.enemies_in_game < self.enemies_max:
-                idx = randint(0, len(self.enemies_types))
+                idx = randint(0, len(self.enemies_types)-1)
                 enemy_conf = self.enemies_types[idx].copy()
                 enemy_conf['world'] = self
 
@@ -130,11 +135,6 @@ class NpGameWorld:
 
                 enemy = Enemy(**enemy_conf)
                 self.enemies.add(enemy)
-
-            # Unlock new enemies
-            if self.enemies_locked and self.iter_count in self.enemies_locked:
-                self.enemies_types += self.enemies_locked[self.iter_count]
-                del self.enemies_locked[self.iter_count]
 
             # +1 to max enemies
             if (self.iter_count+1) % self.enemies_max_iter_step == 0:
