@@ -5,11 +5,13 @@ from .npc import Hero
 
 class NpGameWorld:
 
-    def __init__(self, screen_width=1024, screen_height=768, start_enemies=3):
+    def __init__(self, screen_width=1024, screen_height=768, start_enemies=3,
+                 enemies_max_iter_step=100):
         self.screen_width = screen_width
         self.screen_height = screen_height
 
         self.enemies_in_game = 0
+        self.enemies_max_iter_step = enemies_max_iter_step
         self.enemies_max = start_enemies
         self.enemies_settings = {}
 
@@ -51,8 +53,6 @@ class NpGameWorld:
         hero_actions = None
 
         while not self.game_over:
-            # TODO: unlock new enemies
-            # TODO: increase max enemies count
 
             hero_iter_damage = 0
             rm_bullets = set()
@@ -98,6 +98,12 @@ class NpGameWorld:
             while self.enemies_in_game < self.enemies_max:
                 # TODO: spawn new enemy
                 pass
+
+            # TODO: unlock new enemies
+
+            # +1 to max enemies
+            if (self.iter_count+1) % self.enemies_max_iter_step == 0:
+                self.enemies_max += 1
 
             # TODO: grab stats
 
