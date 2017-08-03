@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
+from math import sqrt
 
 
 class NPC:
@@ -134,7 +134,7 @@ class Enemy(NPC):
         """
 
         for bullet in self.hero_bullets:
-            dst = np.sqrt((self.x - bullet.x)**2 + (self.y - bullet.y)**2)
+            dst = sqrt((self.x - bullet.x)**2 + (self.y - bullet.y)**2)
             if dst <= self.radius + bullet.radius:
                 bullet.got_enemy = True
 
@@ -149,7 +149,7 @@ class Enemy(NPC):
         True if distance between centers less or equal sum of radiuses.
         """
 
-        dst = np.sqrt((self.x - self.hero_x)**2 + (self.y - self.hero_y)**2)
+        dst = sqrt((self.x - self.hero_x)**2 + (self.y - self.hero_y)**2)
         if dst <= self.radius + self.hero_radius:
             self.hit_hero = True
 
