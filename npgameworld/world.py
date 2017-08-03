@@ -11,15 +11,17 @@ class NpGameWorld:
         self.screen_height = screen_height
 
         self.enemies_in_game = 0
+        # Every <enemies_max_iter_step> +1 max enemies
         self.enemies_max_iter_step = enemies_max_iter_step
         self.enemies_max = start_enemies
-        self.enemies_settings = {}
+        self.enemies_locked = {}  # key is unlock level
+        self.enemies_types = []  # available unlocked enemies
 
-        self.enemies = set()
-        self.hero_bullets = set()
+        self.enemies = set()  # alive enemies objects
+        self.hero_bullets = set()  # alive hero's bullets objects
 
         self.game_over = False
-        self.iter_count = 0
+        self.iter_count = 0  # completed iterations counter
         self.enemies_killed = 0
 
     def init_hero(self, hp=100, radius=15, spd=3, bullet_radius=3,
@@ -29,6 +31,7 @@ class NpGameWorld:
         self.hero_hp = hp
         self.hero_radius = radius
         self.hero_spd = spd
+        # How many iterations hero reloads after one shot
         self.hero_reload_iters = reload_iters
 
         self.herp_bul_radius = bullet_radius
@@ -43,8 +46,7 @@ class NpGameWorld:
                          self.hero_bul_spd, self.hero_bul_power,
                          self.hero_reload_iters)
 
-    def setup_enemy(self, hp=1, radius=15, spd=1, unlock=0, power=2,
-                    probability=1):
+    def setup_enemy(self, hp=1, radius=15, spd=1, unlock=0, power=2):
         pass
 
     def world_gen(self):
@@ -99,7 +101,10 @@ class NpGameWorld:
                 # TODO: spawn new enemy
                 pass
 
-            # TODO: unlock new enemies
+            # Unlock new enemies
+            if self.enemies_locked and self.iter_count in self.enemies_locked:
+                self.enemies_types += self.enemies_locked[self.iter_count]
+                del self.enemies_locked[self.iter_count]
 
             # +1 to max enemies
             if (self.iter_count+1) % self.enemies_max_iter_step == 0:
