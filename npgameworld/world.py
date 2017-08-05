@@ -14,7 +14,6 @@ class World:
         self.screen_width = screen_width
         self.screen_height = screen_height
 
-        self.enemies_in_game = 0
         # Every <enemies_max_iter_step> +1 max enemies
         self.enemies_max_iter_step = enemies_max_iter_step
         self.enemies_max = start_enemies
@@ -28,9 +27,18 @@ class World:
         # on enemies spawns
         self.spawn_dst = spawn_dst
 
+        self.world_stat = {
+            'status': {'game_state': 0},
+            'hero': {},
+            'enemies': [],
+            'bullets': []
+        }
         self.game_over = False
         self.iter_count = 0  # completed iterations counter
         self.enemies_killed = 0
+
+        self.logger = WorldLogger(self)
+        self.logger.debug('World init')
 
     def init_hero(self, hp=100, radius=15, spd=3, bullet_radius=3,
                   bullet_spd=6, bullet_power=1, reload_iters=5):
@@ -62,6 +70,49 @@ class World:
             {'radius': radius, 'spd': spd, 'power': power, 'hp': hp}
         )
 
+    def update_world_stat(self):
+        """ Place world info into self.world_stat dict """
+
+        self.world_stat['hero'] = {
+            'x': self.hero_x,
+            'y': self.hero_y,
+            'hp': self.hero_hp
+            # TODO: iters until reloading end
+        }
+
+        self.world_stat['status'] = {
+            'game_state': 1,
+            'iter_num': self.iter_count,
+            'enemies': len(self.enemies),
+            'enemies_killed': self.enemies_killed,
+            'max_enemies': self.enemies_max,
+            'bullets': len(self.hero_bullets),
+        }
+
+        enemies_list = []
+        for e in self.enemies:
+            enemies_list.append({
+                'x': e.x,
+                'y': e.y,
+                'radius': e.radius,
+                'spd': e.spd,
+                'power': e.power,
+                'hp': e.hp
+            })
+
+        bullets_list = []
+        for b in self.hero_bullets:
+            bullets_list.append({
+                'x': b.x,
+                'y': b.y,
+                'radius': b.radius,
+                'spd': b.spd,
+                'power': b.power
+            })
+
+        self.world_stat['enemies'] = enemies_list
+        self.world_stat['bullets'] = bullets_list
+
     def world_gen(self):
         """ Generator for world loop """
 
@@ -75,11 +126,13 @@ class World:
 
             # TODO: iter process for hero
             hero_actions = yield hero_actions
+            self.logger.debug('Hero actions: %s' % hero_actions)
             if hero_actions:
                 pass
 
             self.hero_x = self.hero.x
             self.hero_y = self.hero.y
+            self.logger.debug('Hero pos: %d,%d' % (self.hero_x, self.hero_y))
 
             # Bullets moving
             for bullet in self.hero_bullets:
@@ -99,23 +152,36 @@ class World:
                     rm_bullets.add(enemy.killed_by)
 
             self.enemies_killed += len(rm_enemies)
+            self.logger.debug('Killed enemies on iter: %d' % len(rm_enemies))
+
+            self.logger.debug('Hero got %d damage' % hero_iter_damage)
             self.hero_hp -= hero_iter_damage
+            self.logger.debug('Hero hp: %d' % self.hero_hp)
 
             if self.hero_hp <= 0:
                 self.game_over = True
+                self.update_world_stat()
+                self.world_stat['status']['game_state'] = 2
+                self.logger.debug('Gameover')
                 return
 
             # Remove killed objects
             self.hero_bullets.difference_update(rm_bullets)
             self.enemies.difference_update(rm_enemies)
 
+            self.logger.debug('Enemies killed: %d' % len(rm_enemies))
+            self.logger.debug('Bullets killed: %d' % len(rm_bullets))
+
             # Unlock new enemies
             if self.enemies_locked and self.iter_count in self.enemies_locked:
                 self.enemies_types += self.enemies_locked[self.iter_count]
+                self.logger.debug(
+                    'Enemies unlock: %s' % self.enemies_locked[self.iter_count]
+                )
                 del self.enemies_locked[self.iter_count]
 
             # Enemies spawn
-            while self.enemies_in_game < self.enemies_max:
+            while len(self.enemies) < self.enemies_max:
                 idx = randint(0, len(self.enemies_types)-1)
                 enemy_conf = self.enemies_types[idx].copy()
                 enemy_conf['world'] = self
@@ -136,13 +202,17 @@ class World:
 
                 enemy = Enemy(**enemy_conf)
                 self.enemies.add(enemy)
+                self.logger.debug('Enemy spawn: %s' % enemy_conf)
 
             # +1 to max enemies
             if (self.iter_count+1) % self.enemies_max_iter_step == 0:
                 self.enemies_max += 1
+                self.logger.debug('+1 max enemies')
 
-            # TODO: grab stats
+            self.update_world_stat()
+            self.logger.debug('World stat: %s' % self.world_stat)
 
+            self.logger.debug('Iter %d done' % self.iter_count)
             self.iter_count += 1
 
 
