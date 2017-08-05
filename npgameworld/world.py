@@ -150,9 +150,14 @@ class WorldLogger(logging.LoggerAdapter):
 
     def __init__(self, world):
         self.world = world
-        params = {'iter_num': self.world.iter_count}
-        formatter = '%(asctime)s - %(iter_num)s - %(name)s - \
-%(levelname)s - %(message)s'
 
-        super().__init__(logging.getLogger('npgameworld'), params)
-        self.setFormatter(formatter)
+        self.__logger = logging.getLogger('npgameworld')
+        self.handler = logging.StreamHandler()
+
+        self.formatter = logging.Formatter('%(asctime)s - %(iter_num)s - \
+%(name)s - %(levelname)s - %(message)s')
+        self.handler.setFormatter(self.formatter)
+        self.__logger.addHandler(self.handler)
+
+        self.params = {'iter_num': self.world.iter_count}
+        super().__init__(self.__logger, self.params)

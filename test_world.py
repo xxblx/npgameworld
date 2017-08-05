@@ -12,6 +12,8 @@ def main():
     world.add_enemy_type()
 
     logger = WorldLogger(world)
+    print(logger)
+
     logger.setLevel(logging.DEBUG)
 
     wg = world.world_gen()
