@@ -3,11 +3,11 @@
 
 import logging
 
-from npgameworld.world import NpGameWorld, WorldLogger
+from npgameworld.world import World, WorldLogger
 
 
 def main():
-    world = NpGameWorld()
+    world = World()
     world.init_hero()
     world.add_enemy_type()
 

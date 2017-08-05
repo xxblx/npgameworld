@@ -7,7 +7,7 @@ from random import randint
 from .npc import Hero, Enemy
 
 
-class NpGameWorld:
+class World:
 
     def __init__(self, screen_width=1024, screen_height=768, start_enemies=3,
                  enemies_max_iter_step=100, spawn_dst=150):
