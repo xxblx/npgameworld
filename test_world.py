@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from npgameworld.world import NpGameWorld
+import logging
+
+from npgameworld.world import NpGameWorld, WorldLogger
 
 
 def main():
     world = NpGameWorld()
     world.init_hero()
     world.add_enemy_type()
+
+    logger = WorldLogger(world)
+    logger.setLevel(logging.DEBUG)
 
     wg = world.world_gen()
 

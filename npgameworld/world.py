@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import logging
 from math import sqrt
 from random import randint
 
@@ -143,3 +144,15 @@ class NpGameWorld:
             # TODO: grab stats
 
             self.iter_count += 1
+
+
+class WorldLogger(logging.LoggerAdapter):
+
+    def __init__(self, world):
+        self.world = world
+        params = {'iter_num': self.world.iter_count}
+        formatter = '%(asctime)s - %(iter_num)s - %(name)s - \
+%(levelname)s - %(message)s'
+
+        super().__init__(logging.getLogger('npgameworld'), params)
+        self.setFormatter(formatter)
