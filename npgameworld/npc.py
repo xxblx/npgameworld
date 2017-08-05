@@ -7,7 +7,7 @@ class NPC:
     """ Basic class for all NPC - hero and enemies """
 
     def __init__(self, world, pos_x, pos_y, radius, spd):
-        self.__world = world
+        self._world = world
 
         self.spd = spd
         self.radius = radius
@@ -24,11 +24,11 @@ class NPC:
 
     @property
     def screen_width(self):
-        return self.__world.screen_width
+        return self._world.screen_width
 
     @property
     def screen_height(self):
-        return self.__world.screen_height
+        return self._world.screen_height
 
     def iter_process(self):
         raise NotImplemented
@@ -114,19 +114,19 @@ class Enemy(NPC):
 
     @property
     def hero_x(self):
-        return self.__world.hero_x
+        return self._world.hero_x
 
     @property
     def hero_y(self):
-        return self.__world.hero_y
+        return self._world.hero_y
 
     @property
     def hero_radius(self):
-        return self.__world.hero_radius
+        return self._world.hero_radius
 
     @property
     def hero_bullets(self):
-        return self.__world.hero_bullets
+        return self._world.hero_bullets
 
     def check_bullets_collision(self):
         """
