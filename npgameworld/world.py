@@ -42,7 +42,7 @@ class World:
         self.logger.debug('World init')
 
     def init_hero(self, hp=100, radius=15, spd=3, bullet_radius=3,
-                  bullet_spd=6, bullet_power=1, reload_iters=5):
+                  bullet_spd=6, bullet_power=1, reload_iters=15):
         """ Setup and add hero to world """
 
         self.hero_hp = hp
@@ -61,8 +61,7 @@ class World:
 
         self.hero = Hero(self, self.hero_x, self.hero_y, self.hero_radius,
                          self.hero_spd, self.herp_bul_radius,
-                         self.hero_bul_spd, self.hero_bul_power,
-                         self.hero_reload_iters)
+                         self.hero_bul_spd, self.hero_bul_power)
 
     def add_enemy_type(self, unlock_iter=0, radius=15, spd=1, power=2, hp=1):
         if unlock_iter not in self.enemies_locked:
@@ -132,6 +131,9 @@ class World:
                 hero_moved = False
                 hero_shot = False
 
+                if self.hero.reload_wait > 0:
+                    hero_shot = True
+
                 for action in hero_actions:
                     action_bad = False
 
@@ -160,11 +162,15 @@ class World:
                             bullet = self.hero.shoot(action['x'], action['y'])
                             self.hero_bullets.add(bullet)
                             hero_shot = True
+                            self.hero.reload_wait = self.hero_reload_iters+1
 
                     if action_bad:
                         logging.debug('Bad action: %s' % action)
 
             self.logger.debug('Hero actions: %s' % hero_actions)
+
+            if self.hero.reload_wait > 0:
+                self.hero.reload_wait -= 1
 
             self.hero_x = self.hero.x
             self.hero_y = self.hero.y

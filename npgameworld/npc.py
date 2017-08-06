@@ -31,7 +31,7 @@ class NPC:
         return self._world.screen_height
 
     def iter_process(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def move(self, x_step=0, y_step=0):
 
@@ -65,14 +65,14 @@ class Hero(NPC):
     """ Hero controlled by player """
 
     def __init__(self, world, pos_x, pos_y, radius, spd, bullet_radius,
-                 bullet_spd, bullet_power, reload_iters):
+                 bullet_spd, bullet_power):
 
         super().__init__(world, pos_x, pos_y, radius, spd)
 
         self.bullet_radius = bullet_radius
         self.bullet_spd = bullet_spd
         self.bullet_power = bullet_power
-        self.relod_iters = reload_iters
+        self.reload_wait = 0
 
     def shoot(self, x_target, y_target):
         dst = sqrt((x_target - self.x)**2 + (y_target - self.y)**2)

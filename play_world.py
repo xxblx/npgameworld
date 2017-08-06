@@ -108,6 +108,7 @@ def main():
         pygame.display.flip()
         clock.tick(fps)
 
+    print(world.world_stat)
     pygame.display.quit()
     pygame.quit()
 
