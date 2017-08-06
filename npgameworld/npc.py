@@ -107,10 +107,11 @@ class Enemy(NPC):
     hit_hero = False
     killed_by = None
 
-    def __init__(self, world, pos_x, pos_y, radius, spd, power, hp):
+    def __init__(self, world, pos_x, pos_y, radius, spd, power, hp, enemy_id):
         super().__init__(world, pos_x, pos_y, radius, spd)
         self.power = power
         self.hp = hp
+        self.enemy_id = enemy_id
 
     @property
     def hero_x(self):

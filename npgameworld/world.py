@@ -19,6 +19,7 @@ class World:
         self.enemies_max = start_enemies
         self.enemies_locked = {}  # key is unlock level
         self.enemies_types = []  # available unlocked enemies configs
+        self.enemy_id = 0
 
         self.enemies = set()  # alive enemies objects
         self.hero_bullets = set()  # alive hero's bullets objects
@@ -98,7 +99,8 @@ class World:
                 'radius': e.radius,
                 'spd': e.spd,
                 'power': e.power,
-                'hp': e.hp
+                'hp': e.hp,
+                'enemy_id': e.enemy_id
             })
 
         bullets_list = []
@@ -219,6 +221,9 @@ class World:
 
                 enemy_conf['pos_x'] = x
                 enemy_conf['pos_y'] = y
+
+                enemy_conf['enemy_id'] = self.enemy_id
+                self.enemy_id += 1
 
                 enemy = Enemy(**enemy_conf)
                 self.enemies.add(enemy)
