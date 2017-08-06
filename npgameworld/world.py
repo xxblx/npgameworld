@@ -129,8 +129,12 @@ class World:
 
             hero_actions = yield hero_actions
             if hero_actions:
+                hero_moved = False
+                hero_shot = False
+
                 for action in hero_actions:
-                    if action['cmd'] == 'move':
+                    if action['cmd'] == 'move' and not hero_moved:
+
                         # Check does action command correct
                         action_bad = False
                         if action['xd'] not in self.hero_move_dsts:
@@ -143,12 +147,13 @@ class World:
                                 action['xd']*self.hero_spd,
                                 action['yd']*self.hero_spd
                             )
+                            hero_moved = True
                         else:
                             logging.debug('Bad action: %s' % action)
 
                     # TODO: shooting
-                    elif action['cmd'] == 'shoot':
-                        pass
+                    elif action['cmd'] == 'shoot' and not hero_shot:
+                        hero_shot = True
 
             self.logger.debug('Hero actions: %s' % hero_actions)
 
