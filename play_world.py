@@ -58,7 +58,7 @@ def main():
     # pygame used for circles drawing only
     screen = pygame.display.set_mode((world.screen_width, world.screen_height))
     clock = pygame.time.Clock()
-    fps = 30
+    fps = 120
     pygame.init()
     pygame.display.init()
 
@@ -85,10 +85,11 @@ def main():
         try:
             wg.send(hero_actions)
         except StopIteration:
-            break
+            continue
 
         # Draw hero
-        pygame.draw.circle(screen, hero_color, (world.hero_x, world.hero_y),
+        pygame.draw.circle(screen, hero_color,
+                           (int(world.hero_x), int(world.hero_y)),
                            world.hero_radius)
 
         # Draw enemies
