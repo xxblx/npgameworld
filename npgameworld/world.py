@@ -47,6 +47,7 @@ class World:
         self.hero_hp = hp
         self.hero_radius = radius
         self.hero_spd = spd
+        self.hero_move_dsts = (-1, 0, 1)
         # How many iterations hero reloads after one shot
         self.hero_reload_iters = reload_iters
 
@@ -124,11 +125,30 @@ class World:
             rm_bullets = set()
             rm_enemies = set()
 
-            # TODO: iter process for hero
             hero_actions = yield hero_actions
-            self.logger.debug('Hero actions: %s' % hero_actions)
             if hero_actions:
-                pass
+                for action in hero_actions:
+                    if action['cmd'] == 'move':
+                        # Check does action command correct
+                        action_bad = False
+                        if action['xd'] not in self.hero_move_dsts:
+                            action_bad = True
+                        elif action['yd'] not in self.hero_move_dsts:
+                            action_bad = True
+
+                        if not action_bad:
+                            self.hero.move(
+                                action['xd']*self.hero_spd,
+                                action['yd']*self.hero_spd
+                            )
+                        else:
+                            logging.debug('Bad action: %s' % action)
+
+                    # TODO: shooting
+                    elif action['cmd'] == 'shoot':
+                        pass
+
+            self.logger.debug('Hero actions: %s' % hero_actions)
 
             self.hero_x = self.hero.x
             self.hero_y = self.hero.y
