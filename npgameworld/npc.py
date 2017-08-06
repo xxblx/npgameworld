@@ -33,7 +33,7 @@ class NPC:
     def iter_process(self):
         raise NotImplemented
 
-    def move(self, x_step=0, y_step=0, borders=True):
+    def move(self, x_step=0, y_step=0):
 
         # x moving
         if self.pad_x <= 0 or self.pad_x >= self.screen_width - self.size:
