@@ -77,8 +77,8 @@ class World:
         self.world_stat['hero'] = {
             'x': self.hero_x,
             'y': self.hero_y,
-            'hp': self.hero_hp
-            # TODO: iters until reloading end
+            'hp': self.hero_hp,
+            'reload_wait': self.hero.reload_wait
         }
 
         self.world_stat['status'] = {
