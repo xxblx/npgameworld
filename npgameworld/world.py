@@ -133,10 +133,10 @@ class World:
                 hero_shot = False
 
                 for action in hero_actions:
-                    if action['cmd'] == 'move' and not hero_moved:
+                    action_bad = False
 
+                    if action['cmd'] == 'move' and not hero_moved:
                         # Check does action command correct
-                        action_bad = False
                         if action['xd'] not in self.hero_move_dsts:
                             action_bad = True
                         elif action['yd'] not in self.hero_move_dsts:
@@ -148,12 +148,21 @@ class World:
                                 action['yd']*self.hero_spd
                             )
                             hero_moved = True
-                        else:
-                            logging.debug('Bad action: %s' % action)
 
-                    # TODO: shooting
                     elif action['cmd'] == 'shoot' and not hero_shot:
-                        hero_shot = True
+                        # Check does action command correct
+                        if not (0 <= action['x'] <= self.screen_width):
+                            action_bad = True
+                        elif not (0 <= action['y'] <= self.screen_height):
+                            action_bad = True
+
+                        if not action_bad:
+                            bullet = self.hero.shoot(action['x'], action['y'])
+                            self.hero_bullets.add(bullet)
+                            hero_shot = True
+
+                    if action_bad:
+                        logging.debug('Bad action: %s' % action)
 
             self.logger.debug('Hero actions: %s' % hero_actions)
 

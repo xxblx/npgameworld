@@ -74,23 +74,34 @@ class Hero(NPC):
         self.bullet_power = bullet_power
         self.relod_iters = reload_iters
 
-    def shoot(self):
-        raise NotImplemented
+    def shoot(self, x_target, y_target):
+        dst = sqrt((x_target - self.x)**2 + (y_target - self.y)**2)
+        steps = dst / self.bullet_spd
+
+        # Bullet will get target if moves with x_step and y_step
+        x_step = (x_target - self.x) / steps
+        y_step = (y_target - self.y) / steps
+
+        return HeroBullet(self._world, self.x, self.y, self.bullet_radius,
+                          self.bullet_spd, self.bullet_power, x_step, y_step)
 
 
 class HeroBullet(NPC):
     border_crossed = False
     got_enemy = False
 
-    def __init__(self, world, pos_x, pos_y, radius, spd, power):
+    def __init__(self, world, pos_x, pos_y, radius, spd, power,
+                 x_step, y_step):
         super().__init__(world, pos_x, pos_y, radius, spd)
         self.power = power
+        self.x_step = x_step
+        self.y_step = y_step
 
     def move(self):
-        self.pad_x += self.spd
-        self.pad_y += self.spd
-        self.x += self.spd
-        self.y += self.spd
+        self.pad_x += self.x_step
+        self.pad_y += self.y_step
+        self.x += self.x_step
+        self.y += self.y_step
 
     def check_border_cross(self):
         if self.pad_x < 0 or self.pad_x > self.screen_width:

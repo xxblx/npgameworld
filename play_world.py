@@ -26,6 +26,9 @@ def get_hero_actions(enemies, hero_x, hero_y):
             enemy_x = e['x']
             enemy_y = e['y']
 
+    # Shoot to nearest enemy
+    hero_actions.append({'cmd': 'shoot', 'x': enemy_x, 'y': enemy_y})
+
     # Move into reversed direction from nearest enemy
     # xd - x direction, yd - y direction
     if enemy_x > hero_x:
@@ -94,11 +97,13 @@ def main():
 
         # Draw enemies
         for e in world.enemies:
-            pygame.draw.circle(screen, enemy_color, (e.x, e.y), e.radius)
+            pygame.draw.circle(screen, enemy_color,
+                               (int(e.x), int(e.y)), e.radius)
 
         # Draw bullets
         for b in world.hero_bullets:
-            pygame.draw.circle(screen, hero_bullet_color, (b.x, b.y), b.radius)
+            pygame.draw.circle(screen, hero_bullet_color, (int(b.x), int(b.y)),
+                               b.radius)
 
         pygame.display.flip()
         clock.tick(fps)
