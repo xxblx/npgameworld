@@ -33,7 +33,7 @@ class NPC:
     def iter_process(self):
         raise NotImplementedError
 
-    def move(self, x_step=0, y_step=0):
+    def move(self, xd=0, yd=0):
 
         # x moving
         if self.pad_x <= 0 or self.pad_x >= self.screen_width - self.size:
@@ -45,6 +45,9 @@ class NPC:
         elif 0 < self.pad_x < self.spd:
             x_step = -(self.spd - self.pad_x)
 
+        else:
+            x_step = self.spd * xd
+
         # y moving
         if self.pad_y <= 0 or self.pad_y >= self.screen_height - self.size:
             y_step = 0
@@ -54,6 +57,9 @@ class NPC:
 
         elif 0 < self.pad_y < self.spd:
             y_step = -(self.spd - self.pad_y)
+
+        else:
+            y_step = self.spd * yd
 
         self.pad_x += x_step
         self.pad_y += y_step
@@ -169,19 +175,19 @@ class Enemy(NPC):
         self.hit_hero = False
 
         if self.hero_x > self.x:
-            x_step = self.spd
+            xd = 1
         elif self.hero_x < self.x:
-            x_step = -self.spd
+            xd = -1
         else:
-            x_step = 0
+            xd = 0
 
         if self.hero_y > self.y:
-            y_step = self.spd
+            yd = 1
         elif self.hero_y < self.y:
-            y_step = -self.spd
+            yd = -1
         else:
-            y_step = 0
+            yd = 0
 
-        self.move(x_step, y_step)
+        self.move(xd, yd)
         self.check_bullets_collision()
         self.check_hero_collision()

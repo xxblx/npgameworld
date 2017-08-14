@@ -48,7 +48,7 @@ class World:
         self.hero_hp = hp
         self.hero_radius = radius
         self.hero_spd = spd
-        self.hero_move_dsts = (-1, 0, 1)
+        self.hero_move_directions = (-1, 0, 1)
         # How many iterations hero reloads after one shot
         self.hero_reload_iters = reload_iters
 
@@ -139,16 +139,13 @@ class World:
 
                     if action['cmd'] == 'move' and not hero_moved:
                         # Check does action command correct
-                        if action['xd'] not in self.hero_move_dsts:
+                        if action['xd'] not in self.hero_move_directions:
                             action_bad = True
-                        elif action['yd'] not in self.hero_move_dsts:
+                        elif action['yd'] not in self.hero_move_directions:
                             action_bad = True
 
                         if not action_bad:
-                            self.hero.move(
-                                action['xd']*self.hero_spd,
-                                action['yd']*self.hero_spd
-                            )
+                            self.hero.move(action['xd'], action['yd'])
                             hero_moved = True
 
                     elif action['cmd'] == 'shoot' and not hero_shot:
