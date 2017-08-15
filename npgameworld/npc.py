@@ -62,10 +62,11 @@ class NPC:
             y_step = self.spd * yd
 
         # If npc moves in diagonal direction moving became faster
-        # fix it with steps decreasing
+        # fix it with x_step *= cos, y_step *= sin
         if x_step != 0 and y_step != 0:
-            x_step = x_step * sqrt(2) / 2
-            y_step = y_step * sqrt(2) / 2
+            # cos or sin for 45 degrees == sqrt(2) / 2
+            x_step *= sqrt(2) / 2
+            y_step *= sqrt(2) / 2
 
         self.pad_x += x_step
         self.pad_y += y_step
