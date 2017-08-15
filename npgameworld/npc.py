@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from math import sqrt
+from math import sqrt, cos, sin, atan2
 
 
 class NPC:
@@ -102,12 +102,12 @@ class HeroBullet(NPC):
         super().__init__(world, pos_x, pos_y, radius, spd)
         self.power = power
 
-        dst = sqrt((x_target - pos_x)**2 + (y_target - pos_y)**2)
-        steps = dst / spd
+        direction = atan2(y_target - pos_y, x_target - pos_x)
+        _cos = cos(direction)
+        _sin = sin(direction)
 
-        # Bullet will get target if moves with x_step and y_step
-        self.x_step = (x_target - pos_x) / steps
-        self.y_step = (y_target - pos_y) / steps
+        self.x_step = spd * _cos
+        self.y_step = spd * _sin
 
     def move(self):
         self.pad_x += self.x_step
