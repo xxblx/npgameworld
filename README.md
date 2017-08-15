@@ -1,6 +1,6 @@
 NpGameWorld
-===========
-NpGameWorld is very simple pure python game engine created for embedding. It designed for games like top-down shooters (crimsonlands, etc). World contains hero and enemies. Hero controlled by player, player need to send dictionaries with commands about hero's actions to world. Enemies just moves to hero and hit hero on collisions. 
+=============
+NpGameWorld is very simple pure python game engine created for embedding. It designed for games like top-down shooters (crimsonlands, etc) where player controlls Hero by sending commands (as lists of dictionaries) to world. World contains hero, enemies and bullets. Enemies moves to hero and hit hero on collisions. Hero need to shoot into enemies and/or run out.
 
 # About world
 * 0, 0 - point in left upper corner of world.
@@ -58,5 +58,4 @@ You can add new enemy type into game with `add_enemy_type` world's method
 * `'cmd': 'shoot'`, sends with `x` and `y` - coordinates of shooting target.
 
 Commands neet to be send as list with dictionaries like `[{'cmd': 'shoot', 'x': 114, 'y': 286}, {'cmd': 'move', 'xd': 1, 'yd': -1}]`.
-
 
