@@ -87,15 +87,9 @@ class Hero(NPC):
         self.reload_wait = 0
 
     def shoot(self, x_target, y_target):
-        dst = sqrt((x_target - self.x)**2 + (y_target - self.y)**2)
-        steps = dst / self.bullet_spd
-
-        # Bullet will get target if moves with x_step and y_step
-        x_step = (x_target - self.x) / steps
-        y_step = (y_target - self.y) / steps
-
         return HeroBullet(self._world, self.x, self.y, self.bullet_radius,
-                          self.bullet_spd, self.bullet_power, x_step, y_step)
+                          self.bullet_spd, self.bullet_power,
+                          x_target, y_target)
 
 
 class HeroBullet(NPC):
@@ -103,11 +97,16 @@ class HeroBullet(NPC):
     got_enemy = False
 
     def __init__(self, world, pos_x, pos_y, radius, spd, power,
-                 x_step, y_step):
+                 x_target, y_target):
         super().__init__(world, pos_x, pos_y, radius, spd)
         self.power = power
-        self.x_step = x_step
-        self.y_step = y_step
+
+        dst = sqrt((x_target - pos_x)**2 + (y_target - pos_y)**2)
+        steps = dst / spd
+
+        # Bullet will get target if moves with x_step and y_step
+        self.x_step = (x_target - pos_x) / steps
+        self.y_step = (y_target - pos_y) / steps
 
     def move(self):
         self.pad_x += self.x_step
