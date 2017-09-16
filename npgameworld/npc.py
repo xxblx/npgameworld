@@ -35,38 +35,26 @@ class NPC:
 
     def move(self, xd=0, yd=0):
 
-        # x moving
-        if self.pad_x <= 0 or self.pad_x >= self.screen_width - self.size:
-            x_step = 0
+        target_x = self.pad_x + self.spd * xd
+        target_y = self.pad_y + self.spd * yd
 
-        elif 0 < self.screen_width - self.pad_x + self.size < self.spd:
-            x_step = self.screen_width - self.pad_x + self.size
+        # NPC can't cross screen borders
+        if target_x < 0:
+            target_x = 0
+        elif target_x > self.screen_width - self.size:
+            target_x = self.screen_width - self.size
 
-        elif 0 < self.pad_x < self.spd:
-            x_step = -(self.spd - self.pad_x)
+        if target_y < 0:
+            target_y = 0
+        elif target_y > self.screen_height - self.size:
+            target_y = self.screen_height - self.size
 
-        else:
-            x_step = self.spd * xd
+        direction = atan2(target_y - self.pad_y, target_x - self.pad_x)
+        _cos = cos(direction)
+        _sin = sin(direction)
 
-        # y moving
-        if self.pad_y <= 0 or self.pad_y >= self.screen_height - self.size:
-            y_step = 0
-
-        elif 0 < self.screen_height - self.pad_y + self.size < self.spd:
-            y_step = self.screen_height - self.pad_y + self.size
-
-        elif 0 < self.pad_y < self.spd:
-            y_step = -(self.spd - self.pad_y)
-
-        else:
-            y_step = self.spd * yd
-
-        # If npc moves in diagonal direction moving became faster
-        # fix it with x_step *= cos, y_step *= sin
-        if x_step != 0 and y_step != 0:
-            # cos or sin for 45 degrees == sqrt(2) / 2
-            x_step *= sqrt(2) / 2
-            y_step *= sqrt(2) / 2
+        x_step = self.spd * _cos
+        y_step = self.spd * _sin
 
         self.pad_x += x_step
         self.pad_y += y_step
