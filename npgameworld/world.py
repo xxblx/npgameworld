@@ -109,7 +109,11 @@ class World:
                 'y': b.y,
                 'radius': b.radius,
                 'spd': b.spd,
-                'power': b.power
+                'power': b.power,
+                'x_spawn': b.x_spawn,
+                'y_spawn': b.y_spawn,
+                'x_target': b.x_target,
+                'y_target': b.y_target
             })
 
         self.world_stat['enemies'] = enemies_list
