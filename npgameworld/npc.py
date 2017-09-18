@@ -90,6 +90,12 @@ class HeroBullet(NPC):
         super().__init__(world, pos_x, pos_y, radius, spd)
         self.power = power
 
+        # Where bullet was spawn and where target was located
+        self.x_spawn = pos_x
+        self.y_spawn = pos_y
+        self.x_target = x_target
+        self.y_target = y_target
+
         direction = atan2(y_target - pos_y, x_target - pos_x)
         _cos = cos(direction)
         _sin = sin(direction)
