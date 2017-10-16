@@ -55,14 +55,14 @@ def main():
                            world.hero_radius)
 
         # Draw enemies
-        for e in world.enemies:
+        for e in world.world_stat['enemies']:
             pygame.draw.circle(screen, enemy_color,
-                               (int(e.x), int(e.y)), e.radius)
+                               (int(e['x']), int(e['y'])), e['radius'])
 
         # Draw bullets
-        for b in world.hero_bullets:
-            pygame.draw.circle(screen, hero_bullet_color, (int(b.x), int(b.y)),
-                               b.radius)
+        for b in world.world_stat['bullets']:
+            pygame.draw.circle(screen, hero_bullet_color,
+                               (int(b['x']), int(b['y'])), b['radius'])
 
         pygame.display.flip()
         clock.tick(fps)
