@@ -42,7 +42,7 @@ def main():
     # pygame used for circles drawing only
     screen = pygame.display.set_mode((world.screen_width, world.screen_height))
     clock = pygame.time.Clock()
-    fps = 60
+    fps = 120
     pygame.init()
     pygame.display.init()
 
@@ -86,7 +86,7 @@ def main():
                                (int(e['x']), int(e['y'])), e['radius'])
 
         # Draw bullets
-        for b in world.hero_bullets:
+        for b in world.world_stat['bullets']:
             pygame.draw.circle(screen, hero_bullet_color,
                                (int(b['x']), int(b['y'])), b['radius'])
 
