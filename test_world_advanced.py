@@ -51,7 +51,7 @@ def get_hero_actions(enemies, hero_x, hero_y):
 def main():
 
     # Init game world
-    world = World(screen_width=1280, screen_height=1024, start_enemies=5)
+    world = World(screen_width=1024, screen_height=1024, start_enemies=5)
 
     world.init_hero()
 
@@ -77,7 +77,7 @@ def main():
     world.add_enemy_type(unlock_iter=50000, radius=10, spd=6, power=3, hp=3)
     world.add_enemy_type(unlock_iter=70000, radius=5, spd=9, power=5, hp=5)
 
-    world.logger.setLevel(logging.DEBUG)
+#    world.logger.setLevel(logging.DEBUG)
 
     # Start world generator
     wg = world.world_gen()

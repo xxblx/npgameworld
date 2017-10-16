@@ -12,7 +12,7 @@ from test_world import get_hero_actions
 def main():
 
     # Init game world
-    world = World(screen_width=1280, screen_height=1024, start_enemies=5)
+    world = World(screen_width=1024, screen_height=1024, start_enemies=5)
 
     world.init_hero()
 
