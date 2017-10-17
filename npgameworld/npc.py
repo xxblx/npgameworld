@@ -122,7 +122,8 @@ class HeroBullet(NPC):
 
 class Enemy(NPC):
     hit_hero = False
-    killed_by = None
+    alive = True
+    damaged_by = None
 
     def __init__(self, world, pos_x, pos_y, radius, spd, power, hp, enemy_id):
         super().__init__(world, pos_x, pos_y, radius, spd)
@@ -155,10 +156,11 @@ class Enemy(NPC):
             dst = sqrt((self.x - bullet.x)**2 + (self.y - bullet.y)**2)
             if dst <= self.radius + bullet.radius:
                 bullet.got_enemy = True
-
+                self.damaged_by = bullet
                 self.hp -= bullet.power
+
                 if self.hp <= 0:
-                    self.killed_by = bullet
+                    self.alive = False
                     break
 
     def check_hero_collision(self):

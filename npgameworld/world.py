@@ -190,9 +190,11 @@ class World:
                 if enemy.hit_hero:
                     hero_iter_damage += enemy.power
 
-                if enemy.killed_by is not None:
+                if enemy.damaged_by is not None:
+                    rm_bullets.add(enemy.damaged_by)
+
+                if not enemy.alive:
                     rm_enemies.add(enemy)
-                    rm_bullets.add(enemy.killed_by)
 
             self.enemies_killed += len(rm_enemies)
             self.logger.debug('Killed enemies on iter: %d' % len(rm_enemies))
