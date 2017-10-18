@@ -14,9 +14,9 @@ setup(
     author_email='xxblx@posteo.org',
 
     description='Simple pure python game engine',
-    long_description="""NpGameWorld is very simple pure python game engine
-created for embedding. It designed for games like top-down shooters where
-player controlls Hero by sending commands to world.""",
+    long_description="""NpGameWorld is very simple game engine in pure python
+created for embedding. It is designed for games such as top-down shooters
+where the player controls the hero, sending commands to the world.""",
 
     platforms=['any'],
 
