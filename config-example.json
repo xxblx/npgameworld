@@ -1,0 +1,30 @@
+
+{
+    "world": {
+        "screen_width": 1024,
+        "screen_height": 768,
+        "start_enemies": 3,
+        "enemies_max_iter_step": 100,
+        "spawn_dst": 150
+    },
+
+    "hero": {
+        "hp": 100,
+        "radius": 15,
+        "spd": 3,
+        "bullet_radius": 3,
+        "bullet_spd": 6,
+        "bullet_power": 1,
+        "reload_iters": 15
+    },
+
+    "enemies": [
+        {
+            "unlock_iter": 0,
+            "radius": 15,
+            "spd": 1,
+            "power": 2,
+            "hp": 1
+        }
+    ]
+}
