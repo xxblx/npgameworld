@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os.path
 import logging
 
 import pygame
@@ -12,9 +13,7 @@ from test_world import get_hero_actions
 def main():
 
     # Init game world
-    world = World()
-    world.init_hero()
-    world.add_enemy_type()
+    world = World(conf_path=os.path.realpath('config-example.json'))
     world.logger.setLevel(logging.DEBUG)
 
     # pygame used for circles drawing only
