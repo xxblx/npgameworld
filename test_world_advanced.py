@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os.path
 import logging
 from math import sqrt
 
@@ -51,31 +52,7 @@ def get_hero_actions(enemies, hero_x, hero_y):
 def main():
 
     # Init game world
-    world = World(screen_width=1024, screen_height=1024, start_enemies=5)
-
-    world.init_hero()
-
-    world.add_enemy_type(unlock_iter=0, radius=15, spd=1, power=2, hp=1)
-    world.add_enemy_type(unlock_iter=2500, radius=25, spd=0.7, power=1, hp=1)
-    world.add_enemy_type(unlock_iter=5000, radius=15, spd=1, power=0, hp=1)
-    world.add_enemy_type(unlock_iter=6000, radius=15, spd=0.5, power=1, hp=1)
-    world.add_enemy_type(unlock_iter=6000, radius=10, spd=0.25, power=0.5,
-                         hp=3)
-    world.add_enemy_type(unlock_iter=8000, radius=15, spd=3, power=0, hp=1)
-    world.add_enemy_type(unlock_iter=10000, radius=15, spd=2, power=2, hp=1)
-    world.add_enemy_type(unlock_iter=15000, radius=25, spd=0.3, power=3, hp=3)
-    world.add_enemy_type(unlock_iter=15000, radius=10, spd=5, power=0, hp=1)
-    world.add_enemy_type(unlock_iter=17500, radius=15, spd=3, power=2, hp=1)
-    world.add_enemy_type(unlock_iter=20000, radius=10, spd=4, power=1, hp=1)
-    world.add_enemy_type(unlock_iter=22500, radius=8, spd=3, power=1, hp=1)
-    world.add_enemy_type(unlock_iter=27500, radius=10, spd=4, power=2, hp=1)
-    world.add_enemy_type(unlock_iter=30000, radius=20, spd=4, power=2, hp=2)
-    world.add_enemy_type(unlock_iter=31000, radius=15, spd=6, power=0.1, hp=5)
-    world.add_enemy_type(unlock_iter=32500, radius=25, spd=2, power=5, hp=1)
-    world.add_enemy_type(unlock_iter=35000, radius=12, spd=0.5, power=1, hp=10)
-    world.add_enemy_type(unlock_iter=40000, radius=15, spd=6, power=1, hp=2)
-    world.add_enemy_type(unlock_iter=50000, radius=10, spd=6, power=3, hp=3)
-    world.add_enemy_type(unlock_iter=70000, radius=5, spd=9, power=5, hp=5)
+    world = World(conf_path=os.path.realpath('config-example.json'))
 
     world.logger.setLevel(logging.DEBUG)
 
