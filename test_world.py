@@ -52,7 +52,7 @@ def get_hero_actions(enemies, hero_x, hero_y):
 def main():
 
     # Init game world
-    world = World(conf_path=os.path.realpath('config-example.json'))
+    world = World(conf_path=os.path.realpath('config-default.json'))
     world.logger.setLevel(logging.DEBUG)
 
     # Start world generator

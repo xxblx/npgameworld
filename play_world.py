@@ -13,7 +13,7 @@ from test_world import get_hero_actions
 def main():
 
     # Init game world
-    world = World(conf_path=os.path.realpath('config-example.json'))
+    world = World(conf_path=os.path.realpath('config-default.json'))
     world.logger.setLevel(logging.DEBUG)
 
     # pygame used for circles drawing only
