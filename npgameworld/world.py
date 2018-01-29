@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import json
 import logging
 from math import sqrt
 from random import randint
@@ -8,25 +9,15 @@ from .npc import Hero, Enemy
 
 
 class World:
-
     def __init__(self, screen_width=1024, screen_height=768, start_enemies=3,
-                 enemies_max_iter_step=100, spawn_dst=150):
-        self.screen_width = screen_width
-        self.screen_height = screen_height
+                 enemies_max_iter_step=100, spawn_dst=150, conf_path=None):
 
-        # Every <enemies_max_iter_step> +1 max enemies
-        self.enemies_max_iter_step = enemies_max_iter_step
-        self.enemies_max = start_enemies
         self.enemies_locked = {}  # key is unlock level
         self.enemies_types = []  # available unlocked enemies configs
         self.enemy_id = 0
 
         self.enemies = set()  # alive enemies objects
         self.hero_bullets = set()  # alive hero's bullets objects
-
-        # Minimal possible distance between hero and enemy centres
-        # on enemies spawns
-        self.spawn_dst = spawn_dst
 
         self.world_stat = {
             'status': {'game_state': 0},
@@ -38,8 +29,45 @@ class World:
         self.iter_count = 0  # completed iterations counter
         self.enemies_killed = 0
 
+        # Try to load configuration from file
+        if conf_path is not None:
+            with open(conf_path) as f:
+                conf = json.loads(f.read())
+        else:
+            conf = None
+
+        # Configuration from file
+        if conf:
+            if 'world' in conf:
+                self.apply_conf(**conf['world'])
+
+            if 'hero' in conf:
+                self.init_hero(**conf['hero'])
+
+            if 'enemies' in conf:
+                for e in conf['enemies']:
+                    self.add_enemy_type(**e)
+
+        # Apply configuration from args
+        else:
+            self.apply_conf(*[screen_width, screen_height, start_enemies,
+                              enemies_max_iter_step, spawn_dst])
+
         self.logger = WorldLogger(self)
         self.logger.debug('World init')
+
+    def apply_conf(self, screen_width, screen_height, start_enemies,
+                   enemies_max_iter_step, spawn_dst):
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+
+        # Every <enemies_max_iter_step> +1 max enemies
+        self.enemies_max_iter_step = enemies_max_iter_step
+        self.enemies_max = start_enemies
+
+        # Minimal possible distance between hero and enemy centres
+        # on enemies spawns
+        self.spawn_dst = spawn_dst
 
     def init_hero(self, hp=100, radius=15, spd=3, bullet_radius=3,
                   bullet_spd=6, bullet_power=1, reload_iters=15):
@@ -232,18 +260,33 @@ class World:
                 enemy_conf['world'] = self
 
                 r = enemy_conf['radius']
-                x = randint(r, self.screen_width-r)
-                y = randint(r, self.screen_height-r)
+                x = randint(-self.screen_width / 2 + r,
+                            self.screen_width + self.screen_width / 2 - r)
+                y = randint(-self.screen_height / 2 + r,
+                            self.screen_height + self.screen_width / 2 - r)
                 dst = sqrt((x - self.hero_x)**2 + (y - self.hero_y)**2)
 
                 # Don't spawn enemies near to hero
                 while dst <= self.spawn_dst:
-                    x = randint(r, self.screen_width-r)
-                    y = randint(r, self.screen_height-r)
+                    x = randint(-self.screen_width / 2 + r,
+                                self.screen_width + self.screen_width / 2 - r)
+                    y = randint(-self.screen_height / 2 + r,
+                                self.screen_height + self.screen_width / 2 - r)
+
                     dst = sqrt((x - self.hero_x)**2 + (y - self.hero_y)**2)
 
                 enemy_conf['pos_x'] = x
                 enemy_conf['pos_y'] = y
+
+                # If enemy will spawns outside the screen
+                # allow him to cross border
+                if x < r or x > self.screen_width - r:
+                    ignore_border = True
+                if y < r or y > self.screen_height - r:
+                    ignore_border = True
+                else:
+                    ignore_border = False
+                enemy_conf['ignore_border'] = ignore_border
 
                 enemy_conf['enemy_id'] = self.enemy_id
                 self.enemy_id += 1

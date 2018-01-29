@@ -6,6 +6,8 @@ from math import sqrt, cos, sin, atan2
 class NPC:
     """ Basic class for all NPC - hero and enemies """
 
+    ignore_border = False
+
     def __init__(self, world, pos_x, pos_y, radius, spd):
         self._world = world
 
@@ -39,15 +41,16 @@ class NPC:
         target_y = self.pad_y + self.spd * yd
 
         # NPC can't cross screen borders
-        if target_x < 0:
-            target_x = 0
-        elif target_x > self.screen_width - self.size:
-            target_x = self.screen_width - self.size
+        if not self.ignore_border:
+            if target_x < 0:
+                target_x = 0
+            elif target_x > self.screen_width - self.size:
+                target_x = self.screen_width - self.size
 
-        if target_y < 0:
-            target_y = 0
-        elif target_y > self.screen_height - self.size:
-            target_y = self.screen_height - self.size
+            if target_y < 0:
+                target_y = 0
+            elif target_y > self.screen_height - self.size:
+                target_y = self.screen_height - self.size
 
         direction = atan2(target_y - self.pad_y, target_x - self.pad_x)
         _cos = cos(direction)
@@ -60,6 +63,21 @@ class NPC:
         self.pad_y += y_step
         self.x += x_step
         self.y += y_step
+
+        # Check does NPC already located inside the screen
+        if self.ignore_border:
+            x_ok = False
+            y_ok = False
+
+            if self.pad_x >= 0 and self.pad_x <= self.screen_width-self.size:
+                x_ok = True
+
+            if self.pad_y >= 0 and self.pad_y <= self.screen_height-self.size:
+                y_ok = True
+
+            # Disable border crossing
+            if x_ok and y_ok:
+                self.ignore_border = False
 
 
 class Hero(NPC):
@@ -125,11 +143,13 @@ class Enemy(NPC):
     alive = True
     damaged_by = None
 
-    def __init__(self, world, pos_x, pos_y, radius, spd, power, hp, enemy_id):
+    def __init__(self, world, pos_x, pos_y, radius, spd, power, hp, enemy_id,
+                 ignore_border):
         super().__init__(world, pos_x, pos_y, radius, spd)
         self.power = power
         self.hp = hp
         self.enemy_id = enemy_id
+        self.ignore_border = ignore_border
 
     @property
     def hero_x(self):

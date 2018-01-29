@@ -1,0 +1,43 @@
+
+{
+    "world": {
+        "screen_width": 1024,
+        "screen_height": 1024,
+        "start_enemies": 5,
+        "enemies_max_iter_step": 100,
+        "spawn_dst": 150
+    },
+
+    "hero": {
+        "hp": 100,
+        "radius": 15,
+        "spd": 3,
+        "bullet_radius": 3,
+        "bullet_spd": 6,
+        "bullet_power": 1,
+        "reload_iters": 15
+    },
+
+    "enemies": [
+        {"hp": 1, "power": 2, "radius": 15, "spd": 1, "unlock_iter": 0},
+        {"hp": 1, "power": 1, "radius": 25, "spd": 0.7, "unlock_iter": 2500},
+        {"hp": 1, "power": 0, "radius": 15, "spd": 1, "unlock_iter": 5000},
+        {"hp": 1, "power": 1, "radius": 15, "spd": 0.5, "unlock_iter": 6000},
+        {"hp": 3, "power": 0.5, "radius": 10, "spd": 0.25, "unlock_iter": 6000},
+        {"hp": 1, "power": 0, "radius": 15, "spd": 3, "unlock_iter": 8000},
+        {"hp": 1, "power": 2, "radius": 15, "spd": 2, "unlock_iter": 10000},
+        {"hp": 3, "power": 3, "radius": 25, "spd": 0.3, "unlock_iter": 15000},
+        {"hp": 1, "power": 0, "radius": 10, "spd": 5, "unlock_iter": 15000},
+        {"hp": 1, "power": 2, "radius": 15, "spd": 3, "unlock_iter": 17500},
+        {"hp": 1, "power": 1, "radius": 10, "spd": 4, "unlock_iter": 20000},
+        {"hp": 1, "power": 1, "radius": 8, "spd": 3, "unlock_iter": 22500},
+        {"hp": 1, "power": 2, "radius": 10, "spd": 4, "unlock_iter": 27500},
+        {"hp": 2, "power": 2, "radius": 20, "spd": 4, "unlock_iter": 30000},
+        {"hp": 5, "power": 0.1, "radius": 15, "spd": 6, "unlock_iter": 31000},
+        {"hp": 1, "power": 5, "radius": 25, "spd": 2, "unlock_iter": 32500},
+        {"hp": 10, "power": 1, "radius": 12, "spd": 0.5, "unlock_iter": 35000},
+        {"hp": 2, "power": 1, "radius": 15, "spd": 6, "unlock_iter": 40000},
+        {"hp": 3, "power": 3, "radius": 10, "spd": 6, "unlock_iter": 50000},
+        {"hp": 5, "power": 5, "radius": 5, "spd": 9, "unlock_iter": 70000}
+    ]
+}

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os.path
 import logging
 from math import sqrt
 
@@ -51,9 +52,7 @@ def get_hero_actions(enemies, hero_x, hero_y):
 def main():
 
     # Init game world
-    world = World()
-    world.init_hero()
-    world.add_enemy_type()
+    world = World(conf_path=os.path.realpath('config-default.json'))
     world.logger.setLevel(logging.DEBUG)
 
     # Start world generator
