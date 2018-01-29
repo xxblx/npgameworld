@@ -6,5 +6,5 @@ It designed for games like top-down shooters (crimsonlands, etc) where player
 controlls Hero by sending commands (as lists of dictionaries) to world.
 """
 
-version_info = (0, 1, 1, 'dev0')
+version_info = (0, 1, 1)
 __version__ = '.'.join(map(str, version_info))
