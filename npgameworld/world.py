@@ -260,18 +260,33 @@ class World:
                 enemy_conf['world'] = self
 
                 r = enemy_conf['radius']
-                x = randint(r, self.screen_width-r)
-                y = randint(r, self.screen_height-r)
+                x = randint(-self.screen_width / 2 + r,
+                            self.screen_width + self.screen_width / 2 - r)
+                y = randint(-self.screen_height / 2 + r,
+                            self.screen_height + self.screen_width / 2 - r)
                 dst = sqrt((x - self.hero_x)**2 + (y - self.hero_y)**2)
 
                 # Don't spawn enemies near to hero
                 while dst <= self.spawn_dst:
-                    x = randint(r, self.screen_width-r)
-                    y = randint(r, self.screen_height-r)
+                    x = randint(-self.screen_width / 2 + r,
+                                self.screen_width + self.screen_width / 2 - r)
+                    y = randint(-self.screen_height / 2 + r,
+                                self.screen_height + self.screen_width / 2 - r)
+
                     dst = sqrt((x - self.hero_x)**2 + (y - self.hero_y)**2)
 
                 enemy_conf['pos_x'] = x
                 enemy_conf['pos_y'] = y
+
+                # If enemy will spawns outside the screen
+                # allow him to cross border
+                if x < r or x > self.screen_width - r:
+                    ignore_border = True
+                if y < r or y > self.screen_height - r:
+                    ignore_border = True
+                else:
+                    ignore_border = False
+                enemy_conf['ignore_border'] = ignore_border
 
                 enemy_conf['enemy_id'] = self.enemy_id
                 self.enemy_id += 1
